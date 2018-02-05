@@ -1,9 +1,16 @@
 #include <stdio.h>
 
+void addp(int* p1, int* p2, int* p3){
+  *p3 = *p1 + *p2;
+}
+
 int main() {
-  int x = 5;
-  int y = x + 1;
-  printf("y = %i\n", y);
+  int a = 1;
+  int b = 2;
+  int c;
+
+  addp(&a,&b,&c);
+  printf("%d\n", c);
   return 0;
 }
 
