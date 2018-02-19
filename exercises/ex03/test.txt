@@ -1,0 +1,4 @@
+a.out
+ex03.md
+tee.c
+test.txt
