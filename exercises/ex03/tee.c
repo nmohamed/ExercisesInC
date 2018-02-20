@@ -17,6 +17,11 @@ int main(int argc, char *argv[]) {
   int append = -1;
 
   // Check command line arguments
+  if (argc < 2){
+    puts("tee requires at least 1 argument");
+    return -1;
+  }
+
   while((opt = getopt(argc, argv, "a")) != -1){
     switch(opt){
       case 'a':
@@ -27,10 +32,10 @@ int main(int argc, char *argv[]) {
 
   // Open file to write to
   if (append == 0) {
-    fp = fopen("./test.txt", "a");
+    fp = fopen(argv[1], "a");
   }
   else {
-    fp = fopen("./test.txt", "w+");
+    fp = fopen(argv[1], "w+");
   }
   if(fp == NULL) {
       perror("Error opening file");
