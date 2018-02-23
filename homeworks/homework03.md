@@ -2,17 +2,19 @@
 
 ### C Exercises
 
-Modify the link below so it points to the `ex02.5` directory in your
+Modify the link below so it points to the `ex03` directory in your
 student repository.
 
-[Here is a link to the ex02.5 directory in my repository](https://github.com/nmohamed/ExercisesInC/tree/master/exercises/ex02.5)
+[Here is a link to the ex03 directory in my repository](https://github.com/nmohamed/ExercisesInC/tree/master/exercises/ex03)
 
-### Think OS Chapter 3 reading questions
+### Think OS Chapter 4 reading questions
 
-### Virtual memory
+**Files and file systems**
 
-1) The Georgian alphabet has 33 letters.  How many bit are needed to specify a letter?
+1) What abstractions do file systems provide?  Give an example of something that is logically
+true about files systems but not true of their implementations.
 
+(my answer disappeared when merging)
 6 bits
 
 2) In the UTF-16 character encoding, the binary representation of a character can take up to 32 bits.  
