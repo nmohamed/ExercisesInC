@@ -10,11 +10,13 @@ License: GNU GPLv3
 
 #define SIZE 5
 
+/* returns pointer to a *LOCAL* array where
+   every value = 42 */
 int *foo() {
     int i;
     int array[SIZE];
 
-    //printf("%p\n", array);
+    printf("%p\n", array);
 
     for (i=0; i<SIZE; i++) {
         array[i] = 42;
@@ -22,17 +24,19 @@ int *foo() {
     return array;
 }
 
+/* creates an array where every value = key */
 void bar() {
     int i;
     int array[SIZE];
 
-    //printf("%p\n", array);
+    printf("%p\n", array);
 
     for (i=0; i<SIZE; i++) {
         array[i] = i;
     }
 }
 
+/* tries to print every variable in "array" */
 int main()
 {
     int i;
