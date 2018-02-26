@@ -23,6 +23,7 @@ Follow these steps to get this program working:
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include <ctype.h>
 
 /* reverse_string: Returns a new string with the characters reversed.
 
@@ -32,8 +33,22 @@ s: string
 returns: string
 */
 char *reverse_string(char *s) {
-    //TODO: Fill this in.
-    return "";
+  char temp1, temp2;
+  int i, k, len;
+  len = strlen(s);
+  char r[len];
+
+  if (len == 0){
+    return s;
+  }
+
+  for(i = 0, k = len - 1; i < len; i++, k--) {
+    r[i] = s[k];
+  }
+
+  char *res = malloc(len);
+  strcpy(res, r);
+  return res;
 }
 
 /* ctoi: Converts a character to integer.
@@ -53,7 +68,7 @@ returns: character '0' to '9'
 */
 char itoc(int i) {
     //TODO: Fill this in, with an appropriate assertion.
-    return '0';
+    return i + '0';
 }
 
 /* add_digits: Adds two decimal digits, returns the total and carry.
@@ -69,7 +84,9 @@ carry: pointer to char
 
 */
 void add_digits(char a, char b, char c, char *total, char *carry) {
-    //TODO: Fill this in.
+    int sum = ctoi(a) + ctoi(b) + ctoi(c);
+    *total = itoc(sum%10);
+    *carry = itoc(sum/10);
 }
 
 /* Define a type to represent a BigInt.
