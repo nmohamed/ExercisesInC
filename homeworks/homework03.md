@@ -7,44 +7,43 @@ student repository.
 
 [Here is a link to the ex03 directory in my repository](https://github.com/nmohamed/ExercisesInC/tree/master/exercises/ex03)
 
-### Think OS Chapter 4 reading questions
+### Think OS Chapter 3 reading questions
 
 **Files and file systems**
 
 1) What abstractions do file systems provide?  Give an example of something that is logically
 true about files systems but not true of their implementations.
 
-(my answer disappeared when merging)
-6 bits
+They allow you to avoid complications like only being able to write to a block in a solid state drive a limited number of times.
+They appear to be byte based but are actually block based.
 
-2) In the UTF-16 character encoding, the binary representation of a character can take up to 32 bits.  
-Ignoring the details of the encoding scheme, how many different characters can be represented?
+2) What information do you imagine is stored in an `OpenFileTableEntry`?
 
-2^^32 characters
+The position you're reading from, how big the file is.
 
-3) What is the difference between "memory" and "storage" as defined in *Think OS*?
+3) What are some of the ways operating systems deal with the relatively slow performance of persistent storage?
 
-Memory generally refers to RAM and is presumed volatile, while storage is persistent/non-volatile
+Block transfers, where systems try to read large blocks since the time to load bigger blocks is negligible. Prefetching, where the OS predictively loads a block before it'd requested. Buffering, where data is stored in memory and written to disk later. And finally, chaching.
 
-4) What is the difference between a GiB and a GB?  What is the percentage difference in their sizes?
+4) Suppose your program writes a file and prints a message indicating that it is done writing.  
+Then a power cut crashes your computer.  After you restore power and reboot the computer, you find that the
+file you wrote is not there.  What happened?
 
-GiB is expressed in base 2 while GB is expressed in base 10.
-* 1 GiB -> 2^30
-* 1 GB -> 10^9
-* % difference -> 7.11%
+The data might have been in a cache and not actually written.
 
-5) How does the virtual memory system help isolate processes from each other?
+5) Can you think of one advantage of a File Allocation Table over a UNIX inode?  Or an advantage of a inode over a FAT?
 
-If two processes generate the same virtual address they'd map to different locations in physical memory. A process can't access data from another process since there's no virtual address it can generate that maps to physical memory allocated to another process.
+An inode seems to have a faster search time since all blocks are located in the same file. FAT might be faster if you have more knowledge on where blocks are located.
 
-6) Why do you think the stack and the heap are usually located at opposite ends of the address space?
+6) What is overhead?  What is fragmentation?
 
-Since they both grow, if there is space between them then they both can grow until meeting each other.
+Overhead refers to how much space is left over/taken by the data structures. Fragmentation refers to blocks that are unused/partially used
 
-7) What Python data structure would you use to represent a sparse array?
+7) Why is the "everything is a file" principle a good idea?  Why might it be a bad idea?
 
-A dict of (page, offset) tuple keys mapping to addresses
+You can set up processes so that the output from one is taken as input into another, making it more efficient. It makes programming easier since there's only one API and programs are more versatile since they can work with data from a variety of sources. It can be a bad idea because it limits the amount of ways you can manipulate/process data, which may be bad depending on if you want to do a specific implementation.
 
-8) What is a context switch?
-
-A mechanism where the operating system can interrupt a running process, save its state, and then run another process.
+If you would like to learn more about file systems, a good next step is to learn about journaling file systems.  
+Start with [this Wikipedia article](https://en.wikipedia.org/wiki/Journaling_file_system), then
+[Anatomy of Linux Journaling File Systems](http://www.ibm.com/developerworks/library/l-journaling-filesystems/index.html).  
+Also consider reading [this USENIX paper](https://www.usenix.org/legacy/event/usenix05/tech/general/full_papers/prabhakaran/prabhakaran.pdf).
