@@ -13,7 +13,7 @@ License: MIT License https://opensource.org/licenses/MIT
 #include <sys/types.h>
 #include <unistd.h>
 
-#include "rand.h"
+#include "rand.c"
 
 /* Get the total of user time and system time used by this process.
 */
@@ -52,8 +52,24 @@ double time_func(int iters, float(*func)())
     return t1 - t0;
 }
 
+double time_func2(int iters, double(*func)())
+{
+    int i;
+    double f;
+    double t0, t1;
 
-main(int argc, char *argv[])
+    srandom(time(NULL));
+
+    t0 = get_seconds();
+    for (i=0; i<iters; i++) {
+        f = func();
+    }
+    t1 = get_seconds();
+    return t1 - t0;
+}
+
+
+void main(int argc, char *argv[])
 {
     double time;
     int iters = 100000000;
@@ -64,6 +80,15 @@ main(int argc, char *argv[])
 
     time = time_func(iters, dummy2);
     printf("%f ms \t dummy2\n", time);
+
+    time = time_func2(iters, my_random_double);
+    printf("%f ms \t my_random_double\n", time);
+
+    time = time_func2(iters, my_random_double2);
+    printf("%f ms \t my_random_double2\n", time);
+
+    time = time_func2(iters, random_double);
+    printf("%f ms \t random_double\n", time);
 
     time = time_func(iters, random_float);
     printf("%f ms \t random_float\n", time);

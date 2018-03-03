@@ -11,6 +11,8 @@ from __future__ import print_function, division
 import sys
 
 import numpy as np
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 from collections import Counter
@@ -30,9 +32,9 @@ def main(script, filename=None):
     counter = Counter(t)
 
     xs = counter.keys()
-    xs.sort()
+    sorted(xs)
 
-    ys = np.cumsum(counter.values()).astype(float)
+    ys = np.cumsum(list(counter.values())).astype(float)
     ys /= ys[-1]
 
     options = dict(linewidth=3, alpha=0.5)

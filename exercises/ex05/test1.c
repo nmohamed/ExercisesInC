@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "rand.h"
+#include "rand.c"
 
-main (int argc, char *argv[])
+void main (int argc, char *argv[])
 {
     int i;
     double x;
@@ -11,7 +11,7 @@ main (int argc, char *argv[])
     srandom (time (NULL));
 
     for (i=0; i<10000; i++) {
-        x = random_float();
-        printf ("%lf\n", x);
+        x = my_random_double();
+        printf ("%f\n", x);
     }
 }
