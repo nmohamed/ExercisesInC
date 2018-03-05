@@ -13,7 +13,7 @@ License: MIT License https://opensource.org/licenses/MIT
 #include <sys/types.h>
 #include <unistd.h>
 
-#include "rand.c"
+#include "rand.h"
 
 /* Get the total of user time and system time used by this process.
 */
