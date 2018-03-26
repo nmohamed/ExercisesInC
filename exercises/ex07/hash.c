@@ -178,7 +178,11 @@ int hash_hashable(Hashable *hashable)
 */
 int equal_int (void *ip, void *jp)
 {
-    // FILL THIS IN!
+    int i = hash_int(ip);
+    int j = hash_int(jp);
+    if (i == j){
+      return 1;
+    }
     return 0;
 }
 
@@ -192,7 +196,11 @@ int equal_int (void *ip, void *jp)
 */
 int equal_string (void *s1, void *s2)
 {
-    // FILL THIS IN!
+    char *i = (char *)s1;
+    char *j = (char *)s2;
+    if(strcmp(i, j) == 0){
+      return 1;
+    }
     return 0;
 }
 
@@ -207,8 +215,7 @@ int equal_string (void *s1, void *s2)
 */
 int equal_hashable(Hashable *h1, Hashable *h2)
 {
-    // FILL THIS IN!
-    return 0;
+    return h1->equal (h1->key, h2->key);
 }
 
 
@@ -296,8 +303,13 @@ Node *prepend(Hashable *key, Value *value, Node *rest)
 /* Looks up a key and returns the corresponding value, or NULL */
 Value *list_lookup(Node *list, Hashable *key)
 {
-    // FILL THIS IN!
-    return NULL;
+      while(list != NULL){
+          if(equal_hashable(list->key, key)){
+            return list->value;
+          }
+          list = list->next;
+      }
+      return NULL;
 }
 
 
@@ -341,15 +353,19 @@ void print_map(Map *map)
 /* Adds a key-value pair to a map. */
 void map_add(Map *map, Hashable *key, Value *value)
 {
-    // FILL THIS IN!
+    Node *new = make_node(key, value, NULL);
+    if (map->lists[hash_hashable(key)] == NULL){
+      map->lists[hash_hashable(key)] = new;
+    } else {
+      map->lists[hash_hashable(key)] = prepend(key, value, map->lists[hash_hashable(key)]);
+    }
 }
 
 
 /* Looks up a key and returns the corresponding value, or NULL. */
 Value *map_lookup(Map *map, Hashable *key)
 {
-    // FILL THIS IN!
-    return NULL;
+    return list_lookup(map->lists[hash_hashable(key)], key);
 }
 
 
@@ -374,17 +390,17 @@ int main ()
     print_node (node1);
 
     Value *value2 = make_string_value ("Orange");
-    Node *list = prepend(hashable2, value2, node1);
+    Node *list = prepend(hashable2, value2, node1); //apple, orange, 1, 17
     print_list (list);
 
     // run some test lookups
-    Value *value = list_lookup (list, hashable1);
+    Value *value = list_lookup (list, hashable1); //1
     print_lookup(value);
 
-    value = list_lookup (list, hashable2);
+    value = list_lookup (list, hashable2); // Apple
     print_lookup(value);
 
-    value = list_lookup (list, hashable3);
+    value = list_lookup (list, hashable3); // 2, but 2 is not in list so NULL
     print_lookup(value);
 
     // make a map
