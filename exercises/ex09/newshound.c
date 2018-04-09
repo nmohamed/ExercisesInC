@@ -20,6 +20,12 @@ void error(char *msg)
     exit(1);
 }
 
+void child_code(int i)
+{
+    sleep(i);
+    printf("Hello from child %d.\n", i);
+}
+
 int main(int argc, char *argv[])
 {
     if (argc < 2) {
@@ -38,15 +44,33 @@ int main(int argc, char *argv[])
     int num_feeds = 5;
     char *search_phrase = argv[1];
     char var[255];
+    pid_t pid;
+    int status;
 
     for (int i=0; i<num_feeds; i++) {
-        sprintf(var, "RSS_FEED=%s", feeds[i]);
-        char *vars[] = {var, NULL};
+      pid = fork();
 
-        int res = execle(PYTHON, PYTHON, SCRIPT, search_phrase, NULL, vars);
-        if (res == -1) {
-            error("Can't run script.");
-        }
+      if (pid == 0) { //child
+          sleep(i);
+          printf("child %i RSS_FEED=%s", i, feeds[i]);
+          sprintf(var, "RSS_FEED=%s", feeds[i]);
+          char *vars[] = {var, NULL};
+          int res = execle(PYTHON, PYTHON, SCRIPT, search_phrase, NULL, vars);
+          if (res == -1) {
+              error("Can't run script.");
+          }
+          exit(i);
+      } if(pid < 0){ //error
+        fprintf(stderr, "fork failed: %s\n", strerror(errno));
+        perror(argv[0]);
+        exit(1);
+      }else { //parent
+        do{
+          waitpid(pid, &status, WUNTRACED);
+        } while(!WIFEXITED(status) && !WIFSIGNALED(status));
+      }
     }
+
+    exit(0);
     return 0;
 }
