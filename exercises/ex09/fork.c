@@ -18,7 +18,7 @@ License: MIT License https://opensource.org/licenses/MIT
 // errno is an external global variable that contains
 // error information
 extern int errno;
-
+int global = 0;
 
 // get_seconds returns the number of seconds since the
 // beginning of the day, with microsecond precision
@@ -30,21 +30,35 @@ double get_seconds() {
 }
 
 
-void child_code(int i)
+void child_code(int i, int* global, int *stack, int *heap)
 {
     sleep(i);
+    *global += 1;
+    *stack += 1;
+    *heap += 1;
+    printf("child %d global: %d\n",i, *global);
+    printf("child %d stack: %d\n",i, *stack);
+    printf("child %d heap: %d\n",i, *heap);
     printf("Hello from child %d.\n", i);
 }
 
 // main takes two parameters: argc is the number of command-line
 // arguments; argv is an array of strings containing the command
 // line arguments
+
 int main(int argc, char *argv[])
 {
+    int stack = 0;
+    int *heap = malloc(sizeof(int));
+    *heap = 0;
     int status;
     pid_t pid;
     double start, stop;
     int i, num_children;
+
+    printf("parent global: %d\n", global);
+    printf("parent stack: %d\n", stack);
+    printf("parent heap: %d\n", *heap);
 
     // the first command-line argument is the name of the executable.
     // if there is a second, it is the number of children to create.
@@ -72,7 +86,7 @@ int main(int argc, char *argv[])
 
         /* see if we're the parent or the child */
         if (pid == 0) {
-            child_code(i);
+            child_code(i, &global, &stack, heap);
             exit(i);
         }
     }
@@ -93,6 +107,11 @@ int main(int argc, char *argv[])
         status = WEXITSTATUS(status);
         printf("Child %d exited with error code %d.\n", pid, status);
     }
+
+    printf("parent global: %d\n", global);
+    printf("parent stack: %d\n", stack);
+    printf("parent heap: %d\n", *heap);
+
     // compute the elapsed time
     stop = get_seconds();
     printf("Elapsed time = %f seconds.\n", stop - start);
