@@ -16,6 +16,7 @@ typedef struct {
     int next_out;
     Mutex *mutex;
     Cond *nonempty;
+    Cond *full;
 } Queue;
 
 /* Create an empty queue.
@@ -33,6 +34,7 @@ Queue *make_queue(int length)
     queue->next_out = 0;
     queue->mutex = make_mutex();
     queue->nonempty = make_cond();
+    queue->full = make_cond();
     return queue;
 }
 
@@ -71,9 +73,9 @@ int queue_full(Queue *queue)
 */
 void queue_push(Queue *queue, int item) {
     mutex_lock(queue->mutex);
-    if (queue_full(queue)) {
-        mutex_unlock(queue->mutex);
-        perror_exit("queue is full");
+
+    while(queue_full(queue)){
+     cond_wait(queue->full, queue->mutex);
     }
 
     queue->array[queue->next_in] = item;
@@ -91,6 +93,6 @@ int queue_pop(Queue *queue) {
     int item = queue->array[queue->next_out];
     queue->next_out = queue_incr(queue, queue->next_out);
     mutex_unlock(queue->mutex);
+    cond_signal(queue->full);
     return item;
 }
-
