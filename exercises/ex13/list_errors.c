@@ -181,6 +181,15 @@ Node *make_something() {
     return node3;
 }
 
+void free_node(Node **node) {
+    Node *head = *node;
+    Node *next_node;
+    while(head != NULL) {
+        next_node = head->next;
+        free(head);
+        head = next_node;
+    }
+}
 
 int main() {
     // make a list of even numbers
@@ -200,6 +209,7 @@ int main() {
 
     printf("test_list\n");
     print_list(&test_list);
+    free_node(&test_list);
 
     // make an empty list
     printf("empty\n");
@@ -208,9 +218,10 @@ int main() {
     // add an element to the empty list
     insert_by_index(&empty, 1, 0);
     print_list(&empty);
+    free_node(&empty);
 
     Node *something = make_something();
-    free(something);
+    free_node(&something);
 
     return 0;
 }
